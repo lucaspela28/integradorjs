@@ -13,6 +13,7 @@ const buyBtn = document.querySelector(".comprar");
 const deleteBtn = document.querySelector(".vaciar");
 const total = document.querySelector(".cartTotalPrice");
 const btnAddProduct = document.querySelectorAll(".btnAddProduct");
+const successModal =document.querySelector(".modalAdd1");
 
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -64,42 +65,42 @@ const renderColecciones = (arr) => {
 };
  
 
-const renderFilteredBooks = (category) => {
+const renderFiltradoLIbros = (category) => {
   const productsList = arrayDeLibros.filter(
     (book) => book.categoria === category
   );
   showResults.innerHTML = productsList.map(renderLibro).join("");
 };
 
-const renderBooks = (category) => {
+const renderLibros = (category) => {
   if (!category) {
     renderColecciones(arrayDeLibros);
     return;
   }
-  renderFilteredBooks(category);
+  renderFiltradoLIbros(category);
 };
 
 
-const changeBtnActiveState = (selectedCategory) => {
+const cambiarEstadoBoton = (categoriaElegida) => {
   const categorias = [...categoriesBtn];
-  categorias.forEach((categoryBtn) => {
-    if (categoryBtn.dataset.categoria !== selectedCategory) {
-      categoryBtn.classList.remove("active");
+  categorias.forEach((categoriaBtn) => {
+    if (categoriaBtn.dataset.categoria !== categoriaElegida) {
+      categoriaBtn.classList.remove("active");
       return;
     }
-    categoryBtn.classList.add("active");
+    categoriaBtn.classList.add("active");
   });
 };
 
 
-const applyFilter = (e) => {
+const aplicarFiltro = (e) => {
   if (!e.target.classList.contains("category")) return;
-  changeBtnActiveState(e);
+  cambiarEstadoBoton(e);
   if (!e.target.dataset.categoria) {
     showResults.innerHTML = "";
-    renderBooks();
+    renderLibros();
   } else {
-    renderBooks( e.target.dataset.categoria);
+    renderLibros( e.target.dataset.categoria);
   }
 };
 
@@ -109,11 +110,11 @@ const applyFilter = (e) => {
 
 // carrito
 
-const renderCartProduct =(cartProduct) => {
- const {id, name, precio, autor, imagen, quantity} = cartProduct;
+const renderProductoCarrito =(cartProduct) => {
+ const {id, name, precio, autor, imagen, cantidad} = cartProduct;
  return `
     <div class="product">
-      <div class="renderImg">
+      <div class="imgProduct">
         <img src=${imagen}>
       </div>
       <div class="renderInfo">
@@ -122,157 +123,161 @@ const renderCartProduct =(cartProduct) => {
         <h4 class="precioLibro">$ ${precio}</h4>
       </div>
       <div class="up-and-down">
-        <span class="quantity-handler down" data-id=${id}>-</span>
-        <span class="item-quantity">${quantity}</span>
-        <span class="quantity-handler up" data-id=${id}>+</span>
+        <div class="quantity-handler down" data-id=${id}>-</div>
+        <span class="item-quantity">${cantidad}</span>
+        <div class="quantity-handler up" data-id=${id}>+</div>
       </div>
     </div>`;
 };
 
-const renderCart = ()=> {
+const renderCarrito = ()=> {
   if (!cart.length){
     cartContainer.innerHTML= `<p class='empty-msg'> El carrito aún está vacío. </p>`;
     return;
   };
-  cartContainer.innerHTML = cart.map (renderCartProduct).join("");
+  cartContainer.innerHTML = cart.map (renderProductoCarrito).join("");
 };
 
-const getCartTotal = ()=> {
-  return cart.reduce((acc, cur) => acc + Number(cur.precio) * Number(acc.quantity), 0);
+const obtenerTotal = ()=> {
+  return cart.reduce((acc, cur) => acc + Number(cur.precio) * Number(cur.cantidad), 0);
+  
 };
 
 
-const showTotal = () => {
-  total.innerHTML = `$ ${getCartTotal()}`;
+const mostrarTotal = () => {
+ total.innerHTML = `$ ${obtenerTotal()}`;
 };
 
-/* const disableBtn = (btn) => {
-  if (!cart.length) {
-   btn.classList.add('disabled');
-   return;
-  }
-  btn.classList.remove('disabled');
-}; */
 
-const addUnitToProduct = (product) => {
-  cart=cart.map((cartProduct)=>{
-    return cartProduct.id===product.id
-    ?{...cartProduct, quantity:cartProduct.quantity+1}
-    :cartProduct;
+const agregarUnidad = (libro) => {
+  cart=cart.map((libroCarrito)=>{
+    return libroCarrito.id===libro.id
+    ?{...libroCarrito, cantidad:libroCarrito.cantidad+1}
+    :libroCarrito;
   });
 };
 
-const createCartProduct = (product)=> {
-  cart=[...cart,{...product, quantity:1}];
+const createCartProduct = (libro)=> {
+  cart=[...cart,{...libro, cantidad:1}];
 };
 
 
-const isExistingCartProduct = (p) => {
+const existeLibroCarrito = (p) => {
   return cart.find ((i) => i.id === p.id);
 };
 
-const createProductData = (id, name, autor, precio, imagen, quantity) => {
-  return {id, name, autor, precio, imagen, quantity};
+const crearLibroData = (id, name, autor, precio, imagen, cantidad) => {
+  return {id, name, autor, precio, imagen, cantidad};
 };
 
-const checkCartState = () => {
+const mostrarModal = (msg) => {
+  successModal.classList.add("active-modal");
+  successModal.textContent = msg;
+  setTimeout(() => {
+    successModal.classList.remove("active-modal");
+  }, 1500);
+};
+
+
+const estadoCarrito = () => {
   saveLocalStorage(cart);
-  renderCart(cart);
-  showTotal(cart);
+  renderCarrito(cart);
+  mostrarTotal(cart);
 };
 
 
-const addProduct = (e) => {
+const agregarLibro = (e) => {
   if (!e.target.classList.contains("btnAddProduct")) return;
   const {id, name, autor, precio, imagen} = e.target.dataset;
-  const product = createProductData(id, name, autor, precio, imagen);
-  if (isExistingCartProduct(product)) {
-    addUnitToProduct(product);
+  const producto = crearLibroData(id, name, autor, precio, imagen);
+  if (existeLibroCarrito(producto)) {
+    agregarUnidad(producto);
+    mostrarModal(`Otro ejemplar de "${name}", ha sido añadido al carrito`);
   }else {
-    createCartProduct();
+    createCartProduct(producto);
+    mostrarModal(`"${name}", se ha añadido al carrito`);
   };  
-  checkCartState(cart);
+  estadoCarrito();
 };
 
 
-const substractProductUnit = (existingProduct) => {
-  cart = cart.map((cartProduct)=> {
-    return cartProduct.id === existingProduct.id
-    ? {...cartProduct, quantity:cartProduct.quantity-1}
-    : cartProduct;
+const sustraerUnidadLibro = (existeLibro) => {
+  cart = cart.map((libroCarrito)=> {
+    return libroCarrito.id === existeLibro.id
+    ? {...libroCarrito, cantidad:libroCarrito.cantidad-1}
+    : libroCarrito;
   });
 };
 
 
-const removeProductFromCart = (existingProduct) => {
-  cart = cart.filter ((product) => product.id !== existingProduct.id);
-  checkCartState();
+const sacarLibroCarrito = (existeLibro) => {
+  cart = cart.filter ((product) => product.id !== existeLibro.id);
+  estadoCarrito();
 };
 
-const handleMinusBtnEvent = (id) => {
-   const existingCartProduct = cart.find ((i) => i.id === id);
-  if (existingCartProduct.quantity === 1) {
-    if (window.confirm ("Desea eliminar, el producto del carrito?")) {
-      removeProductFromCart (existingCartProduct);
+const manipularBtnMenos = (id) => {
+   const existeProductoCarrito = cart.find ((i) => i.id === id);
+  if (existeProductoCarrito.cantidad === 1) {
+    if (window.confirm ("Desea eliminar el producto del carrito?")) {
+      sacarLibroCarrito (existeProductoCarrito);
     }
     return;
   }
-  substractProductUnit(existingCartProduct);
+  sustraerUnidadLibro(existeProductoCarrito);
 };
 
 
-const handlePlusBtnEvent = (id) => {
-  const existingCartProduct = cart.find((item) => item.id === id);
-  addUnitToProduct(existingCartProduct);
+const manipularBtnMas = (id) => {
+  const existeProductoCarrito = cart.find((item) => item.id === id);
+  agregarUnidad(existeProductoCarrito);
 };
 
 
-const handleQuantity = (e) => {
+const manipularCantidad = (e) => {
   if(e.target.classList.contains("down")){
-    handleMinusBtnEvent(e.target.dataset.id);
+    manipularBtnMenos(e.target.dataset.id);
   }else if (e.target.classList.contains("up")){
-    handlePlusBtnEvent(e.target.dataset.id);
+    manipularBtnMas(e.target.dataset.id);
   }
-  checkCartState();
+  estadoCarrito();
 };
 
-const resetCartItems = ()=>{
+const resetCarritoItems = ()=>{
   cart=[];
-  checkCartState();
+  estadoCarrito();
 };
 
 
-const completeCartAction = (confirmMsg, successMsg) => {
+const completarAccionCarrito = (confirmMsg, successMsg) => {
   if(!cart.length)return;
   if(window.confirm(confirmMsg)){
-    resetCartItems();
+    resetCarritoItems();
     alert(successMsg);
   }
 };
 
 
-const completeBuy = ()=>{
-  completeCartAction("","");
+const completarCompra = ()=>{
+  completarAccionCarrito("Esta seguro de completar la compra?","La compra fue realizada con exito");
 };
 
-const deleteCart=()=>{
-  completeCartAction("","");
+const borrarCarrito=()=>{
+  completarAccionCarrito("Desea vaciar el carrito?","El carrito esta vacio.");
 };
 
 
 
 const init = ()=> {
-  renderBooks();
-  categorias.addEventListener('click', applyFilter);
+  renderLibros();
+  categorias.addEventListener('click', aplicarFiltro);
   openDesplegable.addEventListener('click', openAndClose);
-  document.addEventListener("DOMContentLoaded", renderCart);
-  document.addEventListener("DOMContentLoaded", showTotal);
-  showResults.addEventListener("click", addProduct);
-  cartContainer.addEventListener("click", handleQuantity);
-  buyBtn.addEventListener("click", completeBuy);
-  deleteBtn.addEventListener("click", deleteCart);
-  /* disableBtn(buyBtn);
-  disableBtn(deleteBtn); */
+  document.addEventListener("DOMContentLoaded", renderCarrito);
+  document.addEventListener("DOMContentLoaded", mostrarTotal);
+  showResults.addEventListener("click", agregarLibro);
+  cartContainer.addEventListener("click", mostrarTotal);
+  cartContainer.addEventListener("click", manipularCantidad);
+  buyBtn.addEventListener("click", completarCompra);
+  deleteBtn.addEventListener("click", borrarCarrito);
 };
 
 init();
@@ -280,12 +285,5 @@ init();
 
 /* ----------------------------------------------------------------------- */
 
-/* 
-const showSuccessModal = (msg) => {
-  successModal.classList.add("active-modal");
-  successModal.textContent = msg;
-  setTimeout(() => {
-    successModal.classList.remove("active-modal");
-  }, 1500);
-};
- */
+
+

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" />
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./queries.css">
     <title>Índice E-Books</title>
 </head>
 
@@ -21,6 +22,7 @@
             <a href="./index.html"> <i class="fa-solid fa-house" alt="Home" id="home-icon"></i></a>
             <i class="fa-solid fa-cart-shopping cartBtnOpen" alt="Carrito de compras"></i>
             <i class="fa-solid fa-user" alt="User"></i>
+            <a href="./login.html" class="registro">Registrate</a>
         </nav>
 
         <div class="cart" hidden>
@@ -28,21 +30,7 @@
             <div class="cartContainer">
                 <h3>Tus E-Books</h3>
                 <div class="cartContainerProducts">
-                    <!-- <div class="product">
-                        <div class="renderImg">
-                            <img src='${imagen}'>
-                        </div>
-                        <div class="renderInfo">
-                            <h5>'${name}'</h5>
-                            <p>'${autor}'</p>
-                            <h4 class="precioLibro">$ ${precio}</h4>
-                        </div>
-                        <div class="up-and-down">
-                            <span class="quantity-handler down" data-id=${id}>-</span>
-                            <span class="item-quantity">${cantidad}</span>
-                            <span class="quantity-handler up" data-id=${id}>+</span>
-                        </div>
-                    </div> -->
+                 
                 </div>
                 <div class="cartContainerTotal">
                     <div class="cartContainerTotalDetails">
@@ -58,7 +46,7 @@
                 </div>
                 <div class="cartContainerEnd">
                     <button class="comprar">COMPRAR</button>
-                    <button class="vaciar">Vaciar carrito</button>
+                    <button class="vaciar">Vaciar</button>
                     <a href="" class="cartContainerEndClose">
                         <p>Ver más productos</p>
                     </a>
@@ -86,7 +74,7 @@
                         <p class="escritorLibro">Daniel Defoe</p>
                         <h4 class="precioLibro">$ 1800</h4>
                     </div>
-                    <button class="btnAddProduct">Agregar</button>
+                   
                 </div>
                 <div class="buscadosContainerBook">
                     <img src="./imgArray/Ficcion/peterPan.jpg" alt="Mas buscado 2" class="buscadosContainerImg">
@@ -95,7 +83,7 @@
                         <p class="escritorLibro">J.M. Barrie</p>
                         <h4 class="precioLibro">$ 2050</h4>
                     </div>
-                    <button class="btnAddProduct">Agregar</button>
+                   
                 </div>
                 <div class="buscadosContainerBook">
                     <img src="./imgArray/Romanticas/cieloBerlin.jpg" alt="Mas buscado 3" class="buscadosContainerImg">
@@ -104,7 +92,7 @@
                         <p class="escritorLibro">Paulo Ribeiro</p>
                         <h4 class="precioLibro">$ 1850</h4>
                     </div>
-                    <button class="btnAddProduct">Agregar</button>
+                 
                 </div>
             </div>
 
@@ -144,19 +132,17 @@
             </div>
             <div class="results">
                 <div class="resultsContainer">
+                
                 </div>
             </div>
         </section>
-        <div class="modalAdd1"></div>
-        <div class="modalAdd2"></div>
-        <div class="modalAdd3"></div>
+        <div class="modalAdd1 active"></div>
         <footer class="footer">
             <ul>
                 <li><a href="http://">Términos de Uso</a></li>
                 <li><a href="http://">Trabajá con nosotros</a></li>
                 <li><a href="http://">Soporte</a></li>
             </ul>
-            <p>Hecho con ❤️ en <b>NUCBAZAPPI</b></p>
         </footer>
     </main>
     <script src="./objetos.js"></script>
