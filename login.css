@@ -46,6 +46,9 @@ body {
     width: 10%;
     height: 150px;
     margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .formularios {
@@ -189,4 +192,14 @@ transition: 0.5s;
         margin: 0;
         padding: 0;
     }
+    
 }
+
+@media (max-width: 400px) {
+    .img{
+        visibility: hidden;
+    }
+}
+
+
+

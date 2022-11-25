@@ -95,8 +95,7 @@ main {
 }
 
 
-
-.navbar {
+.navbar-menu{
     display: flex;
     flex-wrap: wrap;
     position: fixed;
@@ -110,27 +109,24 @@ main {
     padding-right: 10%;
 }
 
-.navbar span {
-    font-size: .7rem;
+.lista-menu{
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
 }
 
-.navbar i {
+.cartBtnOpen,
+.lista-menu li {
     color: var(--amarillo);
     cursor: pointer;
     font-size: 20px;
 }
 
-.navbar i:hover {
-    color: var(--amarillo);
+.menu-label {
+    display: none;
 }
 
-.menu-active {
-    color: var(--amarillo);
-}
-
-#home-icon {
-    color: var(--amarillo);
-}
 
 .cart {
     display: flex;
@@ -222,9 +218,8 @@ main {
     overflow-y: auto;   
 }
 
-
+.lista-menu li:hover,
 .btnAddProduct:hover,
-.buscadosContainerImg button:hover,
 .heroTitle a:hover, 
 .cartContainerEnd button:hover,
 .btnCloseCart:hover,
@@ -366,7 +361,8 @@ main {
 
 .cartContainerEnd button,
 .btnAddProduct,
-.registro {
+.lista-menu li,
+.lista-menu a{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -394,6 +390,10 @@ main {
     line-height: 15px;
 }
 
+.cart::-webkit-scrollbar {
+    display: none;
+}
+
 
 .hero {
     background-image: linear-gradient(rgba(22, 30, 49, 0.75), rgba(139, 162, 218, 0.75)), url(./img/biblioteca.png);
@@ -413,7 +413,6 @@ main {
     gap: 25px;
     width: 50%;
     display: flex;
-    flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -556,9 +555,7 @@ main {
 }
 
 
-.book button,
-.buscadosContainerImg button,
-._results_container_output_2 button {
+.book button{
     border-radius: 17.5px;
     background: var(--grad);
     padding: 7px 15px;
@@ -744,3 +741,5 @@ main {
     transform: translateY(0);
     transition: all 0.5s ease-in;
   }
+
+

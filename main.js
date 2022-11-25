@@ -14,6 +14,8 @@ const deleteBtn = document.querySelector(".vaciar");
 const total = document.querySelector(".cartTotalPrice");
 const btnAddProduct = document.querySelectorAll(".btnAddProduct");
 const successModal =document.querySelector(".modalAdd1");
+const barsMenu= document.querySelector(".lista-menu");
+const barsBtn = document.querySelector(".menu-label");
 
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -34,6 +36,15 @@ const openandCloseCart = () => {
 
 openCart.addEventListener('click', openandCloseCart);
 closeCart.addEventListener('click', openandCloseCart);
+
+const toggleMenu = () => {
+  barsMenu.classList.toggle("open-lista-menu");
+  if (carrito.classList.contains("openCart")) {
+    carrito.classList.remove("openCart");
+    return;
+  }
+  overlay.classList.toggle("showOverlay");
+};
 
 
 const renderLibro = (libro) => {
@@ -270,6 +281,7 @@ const borrarCarrito=()=>{
 const init = ()=> {
   renderLibros();
   categorias.addEventListener('click', aplicarFiltro);
+  barsBtn.addEventListener('click', toggleMenu);
   openDesplegable.addEventListener('click', openAndClose);
   document.addEventListener("DOMContentLoaded", renderCarrito);
   document.addEventListener("DOMContentLoaded", mostrarTotal);
@@ -284,6 +296,7 @@ init();
 
 
 /* ----------------------------------------------------------------------- */
+
 
 
 
